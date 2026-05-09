@@ -1,31 +1,32 @@
-# OpenRouter prices dashboard
+# Дашборд цен OpenRouter
 
-Static single-page dashboard listing all 367 models available via [OpenRouter](https://openrouter.ai/), with search, filters, and per-modality breakdowns (input vs output, image/audio/video/file).
+Одностраничный дашборд со всеми моделями, доступными через [OpenRouter](https://openrouter.ai/) — с поиском, фильтрами и разбивкой по модальностям (вход и выход отдельно: изображения, аудио, видео, файлы).
 
-**Live:** https://ndemchishin.github.io/or-models/
+**Открыть:** https://ndemchishin.github.io/or-models/
 
-## Features
+## Возможности
 
-- Search by model ID or description
-- Provider filter (50+ providers)
-- Separate filters for input modalities (image / audio / video / file) and output modalities (image / audio)
-- Distinguishes truly free models (`:free` suffix, rate-limited) from "preview" models (priced at $0 in the API but billed via upstream)
-- Sortable by price, context length, output/input ratio
-- Color-coded prices: cyan = free, green <$1/M, orange $1–10/M, red ≥$10/M
-- Self-contained — single HTML file, no build, works offline
+- Поиск по ID модели и описанию
+- Фильтр по провайдеру (50+ провайдеров)
+- Раздельные фильтры по модальностям: что модель **принимает** (картинки / аудио / видео / файлы) и что **генерирует** (картинки / аудио)
+- Отличает по-настоящему бесплатные модели (суффикс `:free` в ID, с rate-limit'ами) от «preview»-моделей (в API цена $0, но upstream-провайдер списывает деньги через `usage.cost`)
+- Сортировка по цене input/output, контексту, отношению output/input
+- Цветовая кодировка цен: бирюзовый = бесплатно, зелёный <$1/M, оранжевый $1–10/M, красный ≥$10/M
+- Один HTML-файл, никаких зависимостей, работает оффлайн
 
-## How it's built
+## Как устроено
 
-- `template.html` — page with `__DATA__`, `__UPDATED__`, `__COUNT__` placeholders
-- `build.py` — fetches `https://openrouter.ai/api/v1/models`, renders `index.html`
-- `.github/workflows/refresh.yml` — runs `build.py` every Monday 06:00 UTC and commits if data changed (also runnable manually via Actions tab)
+- `template.html` — HTML-шаблон с плейсхолдерами `__DATA__`, `__UPDATED__`, `__COUNT__`
+- `build.py` — скрипт на Python (только stdlib), качает `https://openrouter.ai/api/v1/models` и рендерит `index.html`
+- `index.html` — сгенерированный артефакт, закоммичен в репо (нужен GitHub Pages для раздачи)
+- `.github/workflows/refresh.yml` — GitHub Action: каждый понедельник в 06:00 UTC прогоняет `build.py` и коммитит обновлённый `index.html`, если данные изменились. Можно запустить вручную из вкладки Actions.
 
-Refresh locally:
+Локальное обновление:
 
 ```bash
 python3 build.py
 ```
 
-## License
+## Лицензия
 
 MIT
