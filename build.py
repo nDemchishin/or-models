@@ -31,14 +31,15 @@ def shape(m):
 
 def main():
     models = [shape(m) for m in fetch()]
-    today = datetime.date.today().isoformat()
+    msk = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=3)))
+    updated = msk.strftime("%Y-%m-%d %H:%M МСК")
     template = (ROOT / "template.html").read_text(encoding="utf-8")
     out = (template
         .replace("__DATA__", json.dumps(models, ensure_ascii=False))
-        .replace("__UPDATED__", today)
+        .replace("__UPDATED__", updated)
         .replace("__COUNT__", str(len(models))))
     (ROOT / "index.html").write_text(out, encoding="utf-8")
-    print(f"OK — {len(models)} models, snapshot {today}, {len(out):,} bytes")
+    print(f"OK — {len(models)} models, snapshot {updated}, {len(out):,} bytes")
 
 if __name__ == "__main__":
     sys.exit(main())
